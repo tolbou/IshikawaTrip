@@ -30,7 +30,6 @@ MVPリリース時点
  投稿削除機能（未ログイン不可）
  プロフィール編集機能（未ログイン不可）
  自分の投稿閲覧機能（未ログイン不可）
- お気に入り投稿閲覧機能（未ログイン不可）
  いいね機能（未ログイン不可）
  いいね解除機能（未ログイン不可）
  ログアウト（未ログイン不可）
@@ -66,3 +65,5 @@ Google MAP API
 ・Firebase
 
 [画面遷移図](https://www.figma.com/file/Y2stBRuG815onyUSQL4fTG/%E7%9F%B3%E5%B7%9D%E3%82%B9%E3%83%9D%E3%83%83%E3%83%88%E3%82%B8%E3%83%A2%E3%83%86%E3%82%A3(%E4%BB%AE)?type=design&node-id=0-1&mode=design&t=LiosedBdBmIOoGJs-0)
+
+[ER図](https://app.diagrams.net/#Htolbou%2FIshikawaTrip%2Fmain%2FER.drawio#%7B%22pageId%22%3A%22R2lEEEUBdFMjLlhIrx00%22%7D)

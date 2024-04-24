@@ -1,16 +1,54 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZEX52S4W9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VZEX52S4W9');
+</script>
+ <meta charset="UTF-8">
     <title>Ishikawatrip</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
   </head>
 
-  <body class="bg-orange-600">
+<body class="bg-gray-100">
+  <header class="bg-white p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <img src="/path/to/logo.png" alt="Logo" class="h-8">
+      <div>
+        <button class="btn btn-primary">ログイン</button>
+        <button class="btn" id="menu-btn">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ここに主要コンテンツ -->
     <%= yield %>
-  </body>
+  </main>
+
+  <footer class="bg-white text-center p-4 mt-4">
+    <div class="container mx-auto">
+      <a href="#" class="link link-hover">利用規約</a>
+      <a href="#" class="link link-hover">プライバシーポリシー</a>
+      <a href="#" class="link link-hover">お問い合わせ</a>
+      <p>© 2024 - IshikawaTrip</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('menu-btn').addEventListener('click', function() {
+      alert('メニューを開く');
+    });
+  </script>
+</body>
 </html>
