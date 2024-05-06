@@ -1,54 +1,65 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZEX52S4W9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VZEX52S4W9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-VZEX52S4W9');
-</script>
- <meta charset="UTF-8">
-    <title>Ishikawatrip</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+    gtag('config', 'G-VZEX52S4W9');
+  </script>
+  <meta charset="UTF-8">
+  <title>Ishikawatrip</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
-  </head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="bg-white">
+  <header class="flex justify-between items-center w-full p-2">
+        <%= image_tag 'ishikawatriplogo.png', alt: 'いしかわとりっぷ', width: "100" %>
+        <div class="flex items-center gap-3">
+            <button class="text-black py-2 px-4 rounded">
+                ログイン
+            </button>
+            <i id="menuIcon" class="fas fa-bars cursor-pointer"></i>
+        </div>
+        <div id="menu" class="hidden absolute right-7 top-20 bg-white py-2 px-4 shadow-lg">
+            <ul class="flex flex-col gap-2">
+                <li>マイページ</li>
+                <li>投稿一覧</li>
+                <li>新規投稿</li>
+                <li>ログアウト</li>
+            </ul>
+        </div>
+    </header>
 
-<body class="bg-gray-100">
-  <header class="bg-white p-4 shadow-md">
-    <div class="container mx-auto flex justify-between items-center">
-      <img src="/path/to/logo.png" alt="Logo" class="h-8">
-      <div>
-        <button class="btn btn-primary">ログイン</button>
-        <button class="btn" id="menu-btn">☰</button>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <!-- ここに主要コンテンツ -->
-    <%= yield %>
+  <main class="text-black">
+    <!-- <%= yield %> -->
   </main>
-
-  <footer class="bg-white text-center p-4 mt-4">
+  <footer class="bg-gray-200 text-center p-4 mt-4">
     <div class="container mx-auto">
-      <a href="#" class="link link-hover">利用規約</a>
-      <a href="#" class="link link-hover">プライバシーポリシー</a>
-      <a href="#" class="link link-hover">お問い合わせ</a>
-      <p>© 2024 - IshikawaTrip</p>
+      <a href="#" class="text-black link link-hover">利用規約</a>
+      <a href="#" class="text-black link link-hover">プライバシーポリシー</a>
+      <a href="#" class="text-black link link-hover">お問い合わせ</a>
+      <p class="text-black">© 2024 - IshikawaTrip</p>
     </div>
   </footer>
 
-  <script>
-    document.getElementById('menu-btn').addEventListener('click', function() {
-      alert('メニューを開く');
-    });
-  </script>
+    <script>
+        const menuIcon = document.getElementById('menuIcon');
+        const menu = document.getElementById('menu');
+
+        menuIcon.addEventListener('click', function() {
+            menu.classList.toggle('hidden');
+            menuIcon.classList.toggle('fa-bars');
+            menuIcon.classList.toggle('fa-times');
+        });
+    </script>
 </body>
 </html>
