@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateLikes < ActiveRecord::Migration[7.1]
   def change
     create_table :likes do |t|
@@ -13,6 +15,6 @@ class CreateLikes < ActiveRecord::Migration[7.1]
     add_index :likes, :user_id
     add_index :likes, :post_id
     # 重複を防ぐためのユニークインデックス
-    add_index :likes, [:user_id, :post_id], unique: true
+    add_index :likes, %i[user_id post_id], unique: true
   end
 end

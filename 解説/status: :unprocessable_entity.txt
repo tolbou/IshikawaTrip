@@ -1,0 +1,26 @@
+status: :unprocessable_entityは、Railsのコントローラーで使用されるHTTPステータスコードの指定です。これは、APIやウェブアプリケーションのクライアントに対して、リクエストが受理できなかったことを伝えるために使用されます。
+
+具体的には、HTTPステータスコード422（Unprocessable Entity）を返します。これは、サーバーがリクエストの内容を理解したが、その内容が処理できなかった場合に使用されます。典型的なケースとしては、フォームのバリデーションエラーや、リクエストデータが適切な形式ではない場合などです。
+
+以下は、Railsのコントローラーでstatus: :unprocessable_entityを使用する例です：
+
+
+class PostsController < ApplicationController
+  def create
+    @post = Post.new(post_params)
+    if @post.save
+      render json: @post, status: :created
+    else
+      render json: @post.errors, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def post_params
+    params.require(:post).permit(:title, :body)
+  end
+end
+この例では、Postオブジェクトを作成しようとしています。もし保存（save）が成功した場合、HTTPステータスコード201（Created）を返します。一方、保存が失敗した場合（例えば、バリデーションエラーが発生した場合）、エラー情報をJSON形式で返しつつ、HTTPステータスコード422（Unprocessable Entity）を返します。
+
+status: :unprocessable_entityを使用する理由は、クライアントに対してリクエストが受理できなかった理由を明確に伝えるためです。これにより、クライアント側で適切にエラー処理を行うことができます。

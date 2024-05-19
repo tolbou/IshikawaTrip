@@ -1,10 +1,6 @@
-Rails.application.routes.draw do
-  get 'post/index'
-  get 'post/new'
-  get 'post/create'
-  get 'post/update'
-  get 'post/destroy'
+# frozen_string_literal: true
 
+Rails.application.routes.draw do
   root 'static_pages#home'
 
   get 'layouts/application'
@@ -15,7 +11,7 @@ Rails.application.routes.draw do
   get 'log_out', to: 'sessions#destroy', as: 'log_out'
 
   resources :sessions, only: %i[create destroy]
-  # 解説/only.txt
-  resources :posts, only: %i[index]
 
+  # RESTfulルーティングを生成する(7つのrouteを通す)
+  resources :posts
 end

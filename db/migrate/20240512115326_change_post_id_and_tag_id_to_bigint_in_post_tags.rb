@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangePostIdAndTagIdToBigintInPostTags < ActiveRecord::Migration[6.0]
   def up
     change_column :post_tags, :post_id, :bigint, using: 'post_id::bigint'
