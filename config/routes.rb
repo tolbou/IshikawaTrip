@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get 'post/index'
+  get 'post/new'
+  get 'post/create'
+  get 'post/update'
+  get 'post/destroy'
 
   root 'static_pages#home'
 
@@ -10,5 +15,7 @@ Rails.application.routes.draw do
   get 'log_out', to: 'sessions#destroy', as: 'log_out'
 
   resources :sessions, only: %i[create destroy]
+  # 解説/only.txt
+  resources :posts, only: %i[index]
 
 end

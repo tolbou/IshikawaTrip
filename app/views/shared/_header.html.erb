@@ -24,7 +24,7 @@
   <div id="menu" class="hidden absolute right-7 top-20 bg-white py-2 px-4 shadow-lg">
     <ul class="flex flex-col gap-2">
       <li>マイページ</li>
-      <li>投稿一覧</li>
+      <li><%= link_to "投稿一覧", post_index_path %></li>
       <li>新規投稿</li>
       <% if current_user %>
       <li>

@@ -32,8 +32,21 @@ gem "jbuilder"
 # GoogleLogin用
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
+# キー関連の管理用
 gem 'dotenv-rails'
 
+# GoogleMapを簡単に作成できる
+gem "gmaps4rails"
+# 地名から緯度経度に変換できる
+gem "geocoder"
+# JSでcontrollerの変数を使えるようにする
+gem "gon"
+
+# テスト用データ作成
+gem 'faker'
+
+
+gem 'solargraph', group: :development
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
