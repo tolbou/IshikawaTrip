@@ -5,6 +5,8 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VZEX52S4W9"></script>
+  <!-- Google Places API  -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>&libraries=places&callback=initAutocomplete" async defer></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -40,6 +42,25 @@
       menuIcon.classList.toggle('fa-bars');
       menuIcon.classList.toggle('fa-times');
     });
+
+    // function initAutocomplete() {
+    //   const autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), {
+    //     types: ['geocode']
+    //   });
+
+    //   autocomplete.addListener('place_changed', function() {
+    //     const place = autocomplete.getPlace();
+    //     const address = place.formatted_address;
+    //     const title = place.name;
+
+    //     document.getElementById('title').value = title;
+    //     document.getElementById('autocomplete').value = address;
+    //   });
+    // }
+
+    // $(document).ready(function(){
+    //   initAutocomplete();
+    // });
   </script>
 </body>
 </html>

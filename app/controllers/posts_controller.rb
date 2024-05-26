@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class PostsController < ApplicationController
   def index
     @posts = Post.all
@@ -7,17 +5,24 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
+    @tags = Tag.all
+    @month_tags = MonthTag.all
+    # view側で直接APIキーを参照することができない為、一度Controllerを挟む
+    @google_maps_api_key = ENV['GOOGLE_MAPS_API_KEY']
+    Rails.logger.debug "Tags: #{@tags.inspect}"
+    Rails.logger.debug "MonthTags: #{@month_tags.inspect}"
   end
 
   def create
     @post = current_user.posts.build(post_params)
+    Rails.logger.debug "パラメータ内容: #{post_params.inspect}"
     if @post.save
       flash[:success] = '投稿完了しました。'
       redirect_to posts_path
     else
       flash.now[:danger] = '投稿に失敗しました。'
       # 解説/status: :unprocessable_entity
-      render :now, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -34,7 +39,7 @@ class PostsController < ApplicationController
     else
       flash.now[:danger] = '更新に失敗しました。'
       # 解説/status: :unprocessable_entity
-      render :now, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -47,7 +52,8 @@ class PostsController < ApplicationController
 
   private
 
+  # ストロングパラメータ
   def post_params
-    params.require(:post).permit(:title, :address, :report)
+    params.require(:post).permit(:title, :address, :report, :image, :image_cache, tag_ids: [], month_tag_ids: [])
   end
 end

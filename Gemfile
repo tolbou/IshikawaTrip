@@ -35,7 +35,7 @@ gem 'jbuilder'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
 # キー関連の管理用
-gem 'dotenv-rails'
+gem 'dotenv-rails', groups: [:development, :test]
 
 # GoogleMapを簡単に作成できる
 gem 'gmaps4rails'
@@ -52,6 +52,10 @@ gem 'solargraph', group: :development
 # gem "redis", ">= 4.0.1"
 
 gem 'tailwindcss-rails'
+
+# 画像のアップロード機能
+gem 'carrierwave', '>= 3.0.0.rc', '< 4.0'
+gem "mini_magick"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
