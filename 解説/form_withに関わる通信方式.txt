@@ -1,0 +1,134 @@
+local: true オプションは、フォームの送信をローカルで行うか、JavaScriptを使って非同期で行うかを指定します。local: true を設定すると、フォームは通常のHTMLフォームのように動作し、ページ全体がリロードされます。
+
+役割
+local: true が指定されている場合、フォーム送信は以下のように動作します。
+
+同期通信: フォームが送信されると、ブラウザはページ全体をサーバーに送信し、新しいページを受け取って表示します。
+JavaScriptなし: フォーム送信にJavaScriptは使用されません。これにより、JavaScriptが無効になっている場合でもフォームが正しく動作します。
+local: true がない場合
+local: true を指定しないと、デフォルトでは form_with は非同期でフォームを送信するように設定されます。これは、フォーム送信がJavaScriptを使ってバックグラウンドで行われることを意味します。
+
+非同期通信: フォーム送信はJavaScriptを使用して行われ、ページ全体のリロードは行われません。
+ユーザーエクスペリエンス: 非同期通信により、ユーザーエクスペリエンスが向上します。例えば、エラーメッセージがページの一部だけに表示されたり、ページ全体のリロードを避けることでユーザーの入力が失われるリスクが減ります。
+結論
+local: true がある場合：フォーム送信は通常のHTMLフォームのように同期的に行われ、ページ全体がリロードされます。
+local: true がない場合：フォーム送信は非同期的に行われ、ページの一部だけが更新されます。
+状況によって、どちらの方式が適しているかを選ぶ必要があります。例えば、シンプルなフォームでは local: true が便利ですが、ユーザーインターフェースが複雑であったり、ユーザーエクスペリエンスを向上させたい場合は非同期通信が適しています。
+
+
+
+local: true をつけた場合にフォームの送信がうまくいかない理由は、form_with のデフォルト動作やTurboの影響が考えられます。
+
+form_with のデフォルト動作
+form_with はデフォルトでリモートフォーム（非同期）として動作します。これはJavaScript（具体的には、Rails UJS）がフォーム送信をハンドリングし、Ajaxリクエストとして送信します。
+
+local: true を指定すると、フォーム送信は通常のHTTPリクエストとして処理されます。しかし、Turboがフォームの送信をインターセプトすることがあります。
+
+Turboの影響
+Turboは、ページの完全なリロードを避けるためにフォーム送信をインターセプトして、非同期で処理しようとします。local: true を指定すると、Turboは無効になりますが、Turboがまだ何らかの影響を与えている可能性があります。
+
+data: { turbo: false } の効果
+data: { turbo: false } を使用すると、Turboが完全に無効になり、通常のフォーム送信が行われます。これにより、Turboによるフォームのインターセプトが回避されます。
+
+なぜ local: true が動かないのか
+以下の理由が考えられます：
+
+フォームのハンドリング: local: true を指定した場合、JavaScriptがフォーム送信をインターセプトしないため、エンドポイントやルーティングの設定が正しくない場合、送信が適切に処理されないことがあります。
+Turboの設定: Turboがまだフォーム送信に影響を与えている可能性があります。
+解決方法
+local: true を使用せず、Turboを無効化する以下のようなコードが確実な解決方法となる場合があります：
+
+erb
+コードをコピーする
+<%= form_with model: @post, data: { turbo: false } do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <div class="mb-4">
+    <%= f.label :title, "スポット名", class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= f.text_field :title, class: "shadow appearance-none border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-black" %>
+  </div>
+  <div class="mb-4">
+    <%= f.label :address, "住所", class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= f.text_field :address, class: "shadow appearance-none border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-black" %>
+  </div>
+  <div class="mb-4">
+    <%= f.label :report, "おすすめポイント", class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= f.text_field :report, class: "shadow appearance-none border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-black" %>
+  </div>
+  <div>
+    <%= f.submit "送信", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+  </div>
+<% end %>
+この設定でフォームが正しく送信されるならば、local: true を使用する必要はありません。フォームの送信が通常のHTTPリクエストとして処理されるため、これで十分です。
+
+まとめ
+local: true を指定すると、フォーム送信が通常のHTTPリクエストとして処理されますが、Turboや他のJavaScriptの影響がある場合、うまく動作しないことがあります。そのため、data: { turbo: false } を使用してTurboを無効化し、フォームの送信を通常のHTTPリクエストとして処理することが推奨されます。
+
+
+
+
+
+local: true と data: { turbo: false } の他にも、Railsやその他のWeb開発において使い分ける必要があるオプションや技術があります。以下にいくつかの例を挙げます。
+
+1. UJS（Unobtrusive JavaScript）とAjaxのオプション
+Railsでは、UJSを使ってフォームやリンクの非同期処理を行うことができます。この機能を制御するために以下のようなオプションを使い分けることがあります。
+
+remote: true:
+役割: フォームやリンクをAjaxリクエストに変換します。
+用途: ページ全体の再読み込みを避け、部分的な更新を行いたい場合に使用します。
+erb
+コードをコピーする
+<%= form_with model: @post, remote: true do |f| %>
+  <!-- フォーム内容 -->
+<% end %>
+data-type:
+役割: Ajaxリクエストのデータタイプを指定します。
+用途: サーバーからのレスポンス形式（HTML、JSON、XMLなど）を指定したい場合に使用します。
+erb
+コードをコピーする
+<%= link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Are you sure?', type: :json } %>
+2. Turbo StreamとTurbo Frame
+Turboはページの部分更新を効率的に行うための技術です。以下のようなオプションを使い分けます。
+
+turbo_frame_tag:
+役割: ページ内の特定の部分を更新するためのフレームを定義します。
+用途: フレーム内の内容を部分的に更新したい場合に使用します。
+erb
+コードをコピーする
+<%= turbo_frame_tag 'post_frame' do %>
+  <!-- フレーム内のコンテンツ -->
+<% end %>
+Turbo Streams:
+役割: サーバーからの指示でページの特定の部分を更新します。
+用途: サーバーからのレスポンスに基づいて、クライアント側のDOMを操作する場合に使用します。
+erb
+コードをコピーする
+<%= turbo_stream_from "posts" %>
+3. CSP（Content Security Policy）設定
+Webアプリケーションのセキュリティを強化するために、CSPを設定することがあります。以下のように使い分けることができます。
+
+content_security_policy:
+役割: スクリプト、スタイル、メディアなどのリソースの読み込みを制御します。
+用途: XSS攻撃を防ぐためにリソースの読み込み元を制限したい場合に使用します。
+ruby
+コードをコピーする
+Rails.application.config.content_security_policy do |policy|
+  policy.default_src :self, :https
+  policy.script_src  :self, :https, :unsafe_inline
+  policy.style_src   :self, :https, :unsafe_inline
+end
+4. JavaScriptの動的読み込みと静的読み込み
+Webアプリケーションのパフォーマンスを最適化するために、JavaScriptの読み込み方法を使い分けることがあります。
+
+defer 属性:
+役割: スクリプトの実行をHTMLのパースが完了するまで遅延させます。
+用途: ページの読み込み速度を向上させたい場合に使用します。
+html
+コードをコピーする
+<script src="path/to/script.js" defer></script>
+async 属性:
+役割: スクリプトの読み込みと実行を他の処理と並行して行います。
+用途: 非同期に読み込んで実行しても問題ないスクリプトに使用します。
+html
+コードをコピーする
+<script src="path/to/script.js" async></script>
+これらのオプションや技術を適切に使い分けることで、アプリケーションの動作を最適化し、ユーザー体験を向上させることができます。それぞれのオプションの特性と用途を理解し、適切な場面で使い分けることが重要です。

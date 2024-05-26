@@ -1,0 +1,53 @@
+<h1 class="text-2xl font-bold mb-4">新規投稿</h1>
+
+<%# 解説/解説/form_withに関わる通信方式.txt %>
+<%= form_with model: @post, data: { turbo: false } do |f| %>
+<%= render 'shared/error_messages', object: f.object %>
+<div class="mb-4">
+    <%= f.label :title, "スポット名", class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= f.text_field :title, id: "title", placeholder: "スポット名や店名などを入力してください", class: "shadow appearance-none border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-black" %>
+</div>
+<div class="mb-4">
+    <%= f.label :address, "住所", class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= f.text_field :address, id: "autocomplete", placeholder: "候補から選択すると住所とスポット名が自動で入力されます", class: "shadow appearance-none border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-black" %>
+</div>
+<div class="mb-4">
+    <%= f.label :report, "おすすめポイント", class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= f.text_field :report, placeholder: "どのような部分がおすすめか教えてください", class: "shadow appearance-none border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-black" %>
+</div>
+<div class="mb-4">
+    <%= f.label :image, "写真"%>
+    <%= f.file_field :image, class:'form-control', accept: 'image/*'%>
+    <%= f.hidden_field :image_cache %>
+    <span class="text-xs text-right mt-1">3枚まで（ファイル形式：jpeg、jpg、png、heic）</span>
+</div>
+<div class="form-group mt-3 mb-3">
+    <% if @post.image.present? %>
+        <%= image_tag @post.image.url, id: 'image_preview' %>
+    <% else %>
+        <%= image_tag '', id: 'preview-target', style: 'display: none;' %>
+    <% end %>
+</div>
+<div class="mb-4">
+<%= f.label :tag_ids, "タグを選択", class: "block text-gray-700 text-sm font-bold mb-2" %>
+<% @tags.each do |tag| %>
+    <div>
+    <%= f.check_box :tag_ids, { multiple: true }, tag.id, nil %>
+    <%= f.label :tag_ids, tag.title %>
+    </div>
+<% end %>
+</div>
+
+<div class="mb-4">
+<%= f.label :month_tag_ids, "おすすめ時期を選択", class: "block text-gray-700 text-sm font-bold mb-2" %>
+<% @month_tags.each do |month_tag| %>
+    <div>
+    <%= f.check_box :month_tag_ids, { multiple: true }, month_tag.id, nil %>
+    <%= f.label :month_tag_ids, month_tag.title %>
+    </div>
+<% end %>
+</div>
+<div>
+    <%= f.submit "送信", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+</div>
+<% end %>
