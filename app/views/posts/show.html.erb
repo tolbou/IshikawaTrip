@@ -40,34 +40,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const likeForm = document.getElementById('like-form');
-
-    likeForm.addEventListener('submit', async (event) => {
-      event.preventDefault(); // デフォルトのフォーム送信を防止
-
-      const formData = new FormData(likeForm);
-      try {
-        const response = await fetch(likeForm.action, {
-          method: 'POST',
-          headers: {
-            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'text/javascript'
-          },
-          body: formData
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const script = await response.text();
-        eval(script); // サーバーからのJavaScriptレスポンスを実行
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    });
-  });
-</script>
