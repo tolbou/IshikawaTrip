@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy, :like]
-  before_action :set_tags, only: [:new, :create]
+  before_action :set_tags, only: [:new, :create, :edit, :update]
 
   def index
     @posts = Post.all
@@ -8,8 +8,6 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
-    @tags = Tag.all
-    @month_tags = MonthTag.all
   end
 
   def create
@@ -29,7 +27,7 @@ class PostsController < ApplicationController
   def update
     if @post.update(post_params)
       flash[:success] = '更新完了しました。'
-      redirect_to posts_path
+      redirect_to @post
     else
       flash.now[:danger] = '更新に失敗しました。'
       render :edit, status: :unprocessable_entity
