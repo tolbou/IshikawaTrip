@@ -8,8 +8,14 @@ Rails.application.routes.draw do
   get 'log_out', to: 'sessions#destroy', as: 'log_out'
   resources :sessions, only: %i[create destroy]
 
-  # RESTfulルーティングを生成する(7つのrouteを通す)
-  resources :posts
+  # 投稿に対するRESTfulルーティングを生成する
+  resources :posts do
+    # 個別の投稿に対するlikeアクションを追加する
+    member do
+      post 'like' # POSTリクエストを受け取る
+    end
+  end
+
 
   # 最後に消す
   match '/_next/*path', to: proc { [200, {}, ['']] }, via: :all

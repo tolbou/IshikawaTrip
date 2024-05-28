@@ -24,14 +24,18 @@
   <%= javascript_include_tag "application", 'data-turbo-track': "reload" %>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body class="bg-white">
-  <%= render "shared/header" %>
+<body class="bg-white h-screen flex flex-col">
+  <header class="z-10">
+    <%= render "shared/header" %>
+  </header>
 
-  <main class="text-black p-4 max-w-4xl mx-auto">
+  <main class="flex-grow relative">
     <%= yield %>
   </main>
 
-  <%= render "shared/footer" %>
+  <footer class="z-10">
+    <%= render "shared/footer" %>
+  </footer>
 
   <script>
     const menuIcon = document.getElementById('menuIcon');
@@ -42,25 +46,6 @@
       menuIcon.classList.toggle('fa-bars');
       menuIcon.classList.toggle('fa-times');
     });
-
-    // function initAutocomplete() {
-    //   const autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), {
-    //     types: ['geocode']
-    //   });
-
-    //   autocomplete.addListener('place_changed', function() {
-    //     const place = autocomplete.getPlace();
-    //     const address = place.formatted_address;
-    //     const title = place.name;
-
-    //     document.getElementById('title').value = title;
-    //     document.getElementById('autocomplete').value = address;
-    //   });
-    // }
-
-    // $(document).ready(function(){
-    //   initAutocomplete();
-    // });
   </script>
 </body>
 </html>

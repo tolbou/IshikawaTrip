@@ -1,0 +1,20 @@
+ja:
+  activerecord:
+    models:
+      post: "投稿"
+    attributes:
+      post:
+        title: "スポット名"
+        address: "住所"
+        report: "おすすめポイント"
+        image: "写真"
+    errors:
+      messages:
+        blank: "を入力してください"
+        too_long: "は%{count}文字以内で入力してください"
+        taken: "はすでに存在します"
+        not_selected: "を選択してください"
+        invalid: "は無効です"
+        not_in_ishikawa: "は石川県の住所ではありません"
+  errors:
+    format: "%{attribute} %{message}"

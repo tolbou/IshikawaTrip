@@ -1,0 +1,42 @@
+<div class="p-4">
+  <header class="w-full flex justify-between items-center mb-4">
+    <%= link_to "＜戻る", posts_path, class: "text-lg font-semibold" %>
+    <h1 class="text-lg font-semibold flex-grow text-center">投稿詳細</h1>
+    <div class="w-12"></div> <!-- 中央寄せのための空要素 -->
+  </header>
+
+  <div class="flex items-center mb-4">
+    <img src="<%= @post.user.image %>" alt="投稿者アイコン" class="w-12 h-12 rounded-full mr-4">
+    <span class="text-lg font-semibold"><%= @post.user.name %></span>
+  </div>
+
+  <div class="mb-4">
+    <img src="<%= @post.image.url %>" alt="<%= @post.title %>" class="w-full h-auto rounded-lg">
+  </div>
+
+  <div class="mb-4">
+    <h2 class="text-2xl font-semibold mb-2"><%= @post.title %></h2>
+    <div class="flex flex-wrap mb-2">
+      <% @post.tags.each do |tag| %>
+        <span class="bg-gray-200 text-gray-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"><%= tag.title %></span>
+      <% end %>
+      <% @post.month_tags.each do |month_tag| %>
+        <span class="bg-red-200 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"><%= month_tag.title %></span>
+      <% end %>
+    </div>
+    <p class="text-sm text-gray-600"><%= @post.report %></p>
+  </div>
+
+  <div class="flex justify-between items-center mt-4">
+    <div class="flex space-x-4">
+      <%= form_with(url: like_post_path(@post), method: :post, remote: true, html: { id: 'like-form', data: { turbo: false } }) do %>
+        <button type="submit" class="btn btn-primary flex items-center">
+          <i class="<%= current_user.likes.exists?(post: @post) ? 'fas fa-thumbs-up text-black' : 'far fa-thumbs-up text-gray-400' %>" id="like-icon"></i>
+        </button>
+      <% end %>
+      <% if current_user == @post.user %>
+        <%= link_to "編集", edit_post_path(@post), class: "btn btn-secondary" %>
+      <% end %>
+    </div>
+  </div>
+</div>

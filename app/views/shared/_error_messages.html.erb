@@ -1,12 +1,10 @@
 <%# 解説/error_messages.txt %>
 <% if object.errors.any? %>
-<div id="error_explanation">
-    <h2><%= pluralize(object.errors.count, "error") %> prohibited this <%= object.class.model_name.human.downcase %>
-        from being saved:</h2>
+  <div id="error_explanation" class="text-red-500">
     <ul>
-        <% object.errors.full_messages.each do |message| %>
+      <% object.errors.full_messages.each do |message| %>
         <li><%= message %></li>
-        <% end %>
+      <% end %>
     </ul>
-</div>
+  </div>
 <% end %>

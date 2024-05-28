@@ -10,11 +10,13 @@ class Post < ApplicationRecord
   after_validation :geocode
 
 
-  validates :title, presence: true, length: { maximum: 255 }
-  validates :address, presence: true, uniqueness: true
-  validates :report, length: { maximum: 300 }
+  validates :title, presence: { message: "を入力してください" }, length: { maximum: 255, message: "は%{count}文字以内で入力してください" }
+  validates :address, presence: { message: "を入力してください" }, uniqueness: { message: "はすでに存在します" }
+  validates :report, length: { maximum: 250, message: "は%{count}文字以内で入力してください" }
+  validates :image, presence: { message: "を選択してください" }
   # validates :image, length: { maximum: 3, message: 'は3枚までしかアップロードできません' }
-  validates :image, presence: true
+  validate :at_least_one_tag
+  validate :address_must_be_in_ishikawa
 
   # Tags との多対多関連を設定（HABTM）※PostTagモデルを作成していないので。
   # 解説/HABTM.txt
@@ -26,6 +28,10 @@ class Post < ApplicationRecord
   # User と Post モデルに Like モデルを通じた関連付けを追加
   has_many :likes
   has_many :likers, through: :likes, source: :user
+
+  def image_url
+    image.url
+  end
 
   private
 
@@ -42,5 +48,13 @@ class Post < ApplicationRecord
         self.longitude = geo.longitude
       end
     end
+  end
+  def at_least_one_tag
+    errors.add(:base, "タグを一つ以上選択してください") if tag_ids.blank?
+  end
+  def address_must_be_in_ishikawa
+    return if address.include?('石川県')
+
+    errors.add(:base, '石川県の住所を入力してください')
   end
 end
