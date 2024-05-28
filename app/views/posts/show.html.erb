@@ -40,3 +40,23 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('turbo:load', () => {
+    const likeForm = document.getElementById('like-form');
+
+    likeForm.addEventListener('ajax:beforeSend', (event) => {
+      event.preventDefault();
+    });
+
+    likeForm.addEventListener('ajax:success', (event) => {
+      const [data, status, xhr] = event.detail;
+      // Handle success response if needed
+    });
+
+    likeForm.addEventListener('ajax:error', (event) => {
+      const [data, status, xhr] = event.detail;
+      // Handle error response if needed
+    });
+  });
+</script>
