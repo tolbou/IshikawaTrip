@@ -1,4 +1,7 @@
 class PostsController < ApplicationController
+  before_action :set_post, only: [:show, :edit, :update, :destroy, :like]
+  before_action :set_tags, only: [:new, :create]
+
   def index
     @posts = Post.all
   end
@@ -7,15 +10,12 @@ class PostsController < ApplicationController
     @post = Post.new
     @tags = Tag.all
     @month_tags = MonthTag.all
-    # view側で直接APIキーを参照することができない為、一度Controllerを挟む
-    @google_maps_api_key = ENV['GOOGLE_MAPS_API_KEY']
-    Rails.logger.debug "Tags: #{@tags.inspect}"
-    Rails.logger.debug "MonthTags: #{@month_tags.inspect}"
   end
 
   def create
     @post = current_user.posts.build(post_params)
-    Rails.logger.debug "パラメータ内容: #{post_params.inspect}"
+    @tags = Tag.all
+    @month_tags = MonthTag.all
     if @post.save
       flash[:success] = '投稿完了しました。'
       redirect_to posts_path
@@ -31,22 +31,37 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = current_user.posts.find(params[:id])
-    if @post.update
+    if @post.update(post_params)
       flash[:success] = '更新完了しました。'
-      # 　仮
       redirect_to posts_path
     else
       flash.now[:danger] = '更新に失敗しました。'
-      # 解説/status: :unprocessable_entity
       render :edit, status: :unprocessable_entity
     end
   end
 
+  def show
+  end
+
+  def like
+    like = @post.likes.find_by(user: current_user)
+    if like
+      like.destroy
+      @liked = false
+    else
+      @post.likes.create(user: current_user)
+      @liked = true
+    end
+
+    respond_to do |format|
+      format.html { redirect_to @post }
+      format.js
+    end
+  end
+
   def destroy
-    post = current_user.posts.find(params[:id])
-    post.destroy!
-    # 　仮
+    @post.destroy!
+    flash[:success] = '投稿を削除しました。'
     redirect_to posts_path
   end
 
@@ -55,5 +70,14 @@ class PostsController < ApplicationController
   # ストロングパラメータ
   def post_params
     params.require(:post).permit(:title, :address, :report, :image, :image_cache, tag_ids: [], month_tag_ids: [])
+  end
+
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
+  def set_tags
+    @tags = Tag.all
+    @month_tags = MonthTag.all
   end
 end

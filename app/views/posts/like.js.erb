@@ -1,0 +1,5 @@
+<% if @liked %>
+  $("#like-icon").removeClass("far fa-thumbs-up text-gray-400").addClass("fas fa-thumbs-up text-black");
+<% else %>
+  $("#like-icon").removeClass("fas fa-thumbs-up text-black").addClass("far fa-thumbs-up text-gray-400");
+<% end %>
