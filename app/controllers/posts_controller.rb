@@ -14,20 +14,16 @@ class PostsController < ApplicationController
 
   def create
     @post = current_user.posts.build(post_params)
-    @tags = Tag.all
-    @month_tags = MonthTag.all
     if @post.save
       flash[:success] = '投稿完了しました。'
       redirect_to posts_path
     else
       flash.now[:danger] = '投稿に失敗しました。'
-      # 解説/status: :unprocessable_entity
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @post = current_user.posts.find(params[:id])
   end
 
   def update
@@ -67,7 +63,6 @@ class PostsController < ApplicationController
 
   private
 
-  # ストロングパラメータ
   def post_params
     params.require(:post).permit(:title, :address, :report, :image, :image_cache, tag_ids: [], month_tag_ids: [])
   end
