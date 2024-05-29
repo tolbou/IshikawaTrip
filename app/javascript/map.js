@@ -1,28 +1,22 @@
 function initMap() {
   const mapElement = document.getElementById("map");
-
-  const ishikawaBounds = {
-    north: 37.728803,
-    south: 36.010473,
-    west: 136.029081,
-    east: 137.596202,
-  };
-
   const mapOptions = {
-    center: { lat: 36.578057, lng: 136.648957 }, // 石川県の中心座標
-    zoom: 9, // ズームレベルを上げて、石川県にズームイン
+    center: { lat: 36.578057, lng: 136.648957 },
+    zoom: 9,
   };
-
   const map = new google.maps.Map(mapElement, mapOptions);
+  updateMarkers(map);
+}
 
-  // const bounds = new google.maps.LatLngBounds(
-  //   { lat: ishikawaBounds.south, lng: ishikawaBounds.west },
-  //   { lat: ishikawaBounds.north, lng: ishikawaBounds.east }
-  // );
-  // map.fitBounds(bounds);
-
+function updateMarkers(map) {
+  const mapElement = document.getElementById("map");
   const posts = JSON.parse(mapElement.dataset.posts);
-  console.log("Loaded posts:", posts); // デバッグ用に追加
+
+  if (window.markers) {
+    window.markers.forEach((marker) => marker.setMap(null));
+  }
+  window.markers = [];
+
   for (const post of posts) {
     const marker = new google.maps.Marker({
       position: { lat: post.latitude, lng: post.longitude },
@@ -33,6 +27,8 @@ function initMap() {
     marker.addListener("click", () => {
       showModal(post);
     });
+
+    window.markers.push(marker);
   }
 }
 
@@ -73,14 +69,52 @@ function showModal(post) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("Document loaded"); // デバッグ用メッセージ
-
   if (document.getElementById("map")) {
-    console.log("Map element found, initializing map"); // デバッグ用メッセージ
     initMap();
-  } else {
-    console.log("Map element not found");
   }
+
+  document
+    .getElementById("search-form")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+      const query = new URLSearchParams(formData).toString();
+
+      fetch(`${this.action}?${query}`, {
+        headers: { Accept: "application/json" },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("map").dataset.posts = JSON.stringify(data);
+          initMap();
+        });
+    });
+
+  document
+    .getElementById("search-bar-check")
+    .addEventListener("change", function (event) {
+      const searchFormContainer = document.querySelector(
+        ".search-form-container"
+      );
+
+      if (this.checked) {
+        searchFormContainer.style.height = "auto";
+      } else {
+        searchFormContainer.style.height = "auto";
+      }
+    });
+
+  document.getElementById("reset-button").addEventListener("click", () => {
+    document.getElementById("search-form").reset();
+    fetch(window.location.href, {
+      headers: { Accept: "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById("map").dataset.posts = JSON.stringify(data);
+        initMap();
+      });
+  });
 });
 
 document.addEventListener("click", (event) => {
