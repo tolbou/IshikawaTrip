@@ -20,13 +20,14 @@ class Post < ApplicationRecord
 
   # Tags との多対多関連を設定（HABTM）※PostTagモデルを作成していないので。
   # 解説/HABTM.txt
-  has_many :post_tags
+  # dependent: :destroyオプションを追加する：これにより、Postが削除されるときに関連するPostTagレコードも自動的に削除されます。
+  has_many :post_tags, dependent: :destroy
   has_many :tags, through: :post_tags
 
-  has_many :post_month_tags
+  has_many :post_month_tags, dependent: :destroy
   has_many :month_tags, through: :post_month_tags
-  # User と Post モデルに Like モデルを通じた関連付けを追加
-  has_many :likes
+
+  has_many :likes, dependent: :destroy
   has_many :likers, through: :likes, source: :user
 
   def image_url

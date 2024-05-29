@@ -1,35 +1,36 @@
-// Place Autocomplete
-document.addEventListener("DOMContentLoaded", () => {
+function initAutocomplete() {
   const inputTitle = document.getElementById("title");
   const inputAddress = document.getElementById("address");
 
-  //オートコンプリートのオプション
-  const options = {
-    types: ["establishment"], // 店名や施設名に絞り込み
-    componentRestrictions: { country: "JP" },
-  };
+  if (inputTitle && inputAddress) {
+    const options = {
+      types: ["establishment"],
+      componentRestrictions: { country: "JP" },
+    };
 
-  // オートコンプリート適用
-  const autocompleteTitle = new google.maps.places.Autocomplete(
-    inputTitle,
-    options
-  );
-  const autocompleteAddress = new google.maps.places.Autocomplete(
-    inputAddress,
-    options
-  );
+    const autocompleteTitle = new google.maps.places.Autocomplete(
+      inputTitle,
+      options
+    );
+    const autocompleteAddress = new google.maps.places.Autocomplete(
+      inputAddress,
+      options
+    );
 
-  // タイトルのオートコンプリートが選択されたとき
-  autocompleteTitle.addListener("place_changed", () => {
-    const place = autocompleteTitle.getPlace();
-    inputTitle.value = place.name;
-    inputAddress.value = place.formatted_address;
-  });
+    autocompleteTitle.addListener("place_changed", () => {
+      const place = autocompleteTitle.getPlace();
+      inputTitle.value = place.name;
+      inputAddress.value = place.formatted_address;
+    });
 
-  // 住所のオートコンプリートが選択されたとき
-  autocompleteAddress.addListener("place_changed", () => {
-    const place = autocompleteAddress.getPlace();
-    inputTitle.value = place.name;
-    inputAddress.value = place.formatted_address;
-  });
-});
+    autocompleteAddress.addListener("place_changed", () => {
+      const place = autocompleteAddress.getPlace();
+      inputTitle.value = place.name;
+      inputAddress.value = place.formatted_address;
+    });
+  } else {
+    console.error("Input elements not found.");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initAutocomplete);
