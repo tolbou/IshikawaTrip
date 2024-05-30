@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 追加のカスタムスタイル */
+.search-form-container {
+  width: 100%;
+}
+
+.search-form {
+  width: 100%;
+}
+
+#map {
+  width: 100%;
+  height: 800px; /* 固定サイズ */
+}
+
+@media (min-width: 640px) {
+  #map {
+    height: 1000px; /* スクリーン幅が640px以上の場合の高さ */
+  }
+}
+
+.collapse-content {
+  display: none;
+}
+
+input[type="checkbox"]:checked ~ .collapse-content {
+  display: block;
+}

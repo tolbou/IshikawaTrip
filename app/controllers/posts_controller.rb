@@ -4,6 +4,23 @@ class PostsController < ApplicationController
 
   def index
     @posts = Post.all
+
+    if params[:q].present?
+      @posts = @posts.where("posts.title LIKE ? OR posts.report LIKE ? OR posts.address LIKE ?", "%#{params[:q]}%", "%#{params[:q]}%", "%#{params[:q]}%")
+    end
+
+    if params[:tag_id].present?
+      @posts = @posts.joins(:tags).where(tags: { id: params[:tag_id] })
+    end
+
+    if params[:month_tag_id].present?
+      @posts = @posts.joins(:month_tags).where(month_tags: { id: params[:month_tag_id] })
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @posts.to_json(include: { tags: { only: :title }, month_tags: { only: :title } }, methods: :image_url) }
+    end
   end
 
   def new
@@ -54,7 +71,6 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    Rails.logger.debug "destroyメソッドが呼び出されました"
     if @post.destroy
       flash[:success] = '投稿を削除しました。'
       redirect_to posts_path
