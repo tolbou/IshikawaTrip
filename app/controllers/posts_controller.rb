@@ -71,7 +71,6 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    Rails.logger.debug "destroyメソッドが呼び出されました"
     if @post.destroy
       flash[:success] = '投稿を削除しました。'
       redirect_to posts_path

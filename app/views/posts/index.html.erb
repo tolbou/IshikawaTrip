@@ -21,7 +21,7 @@
           </div>
           <div class="flex justify-between">
             <%= submit_tag "検索", class: "bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-            <%= button_tag "リセット", type: "button", id: "reset-button", class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+            <%= link_to 'リセット', posts_path, id: "reset-button", class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
           </div>
         <% end %>
       </div>
@@ -34,3 +34,6 @@
 
 <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV['GOOGLE_MAPS_API_KEY']}&libraries=places&callback=initMap", async: true, defer: true %>
 <%= javascript_include_tag 'map' %>
+
+<%= javascript_include_tag "application", 'data-turbo-track': "reload", defer: true %>
+

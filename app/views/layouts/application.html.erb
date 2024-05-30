@@ -40,13 +40,17 @@
   </footer>
 
   <script>
-    const menuIcon = document.getElementById('menuIcon');
-    const menu = document.getElementById('menu');
-
-    menuIcon.addEventListener('click', function() {
-      menu.classList.toggle('hidden');
-      menuIcon.classList.toggle('fa-bars');
-      menuIcon.classList.toggle('fa-times');
+    document.addEventListener("DOMContentLoaded", function() {
+      console.log("DOM fully loaded and parsed");
+      const menuIcon = document.getElementById('menuIcon');
+      const menu = document.getElementById('menu');
+      if (menuIcon && menu) {
+        menuIcon.addEventListener('click', function() {
+          menu.classList.toggle('hidden');
+          menuIcon.classList.toggle('fa-bars');
+          menuIcon.classList.toggle('fa-times');
+        });
+      }
     });
   </script>
 </body>

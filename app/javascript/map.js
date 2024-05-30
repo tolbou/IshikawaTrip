@@ -1,14 +1,16 @@
+let map; // グローバルなmapオブジェクトを定義
+
 function initMap() {
   const mapElement = document.getElementById("map");
   const mapOptions = {
     center: { lat: 36.578057, lng: 136.648957 },
     zoom: 9,
   };
-  const map = new google.maps.Map(mapElement, mapOptions);
-  updateMarkers(map);
+  map = new google.maps.Map(mapElement, mapOptions); // グローバルなmapオブジェクトを初期化
+  updateMarkers();
 }
 
-function updateMarkers(map) {
+function updateMarkers() {
   const mapElement = document.getElementById("map");
   const posts = JSON.parse(mapElement.dataset.posts);
 
@@ -73,9 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
     initMap();
   }
 
-  document
-    .getElementById("search-form")
-    .addEventListener("submit", function (event) {
+  const searchForm = document.getElementById("search-form");
+  if (searchForm) {
+    searchForm.addEventListener("submit", function (event) {
       event.preventDefault();
       const formData = new FormData(this);
       const query = new URLSearchParams(formData).toString();
@@ -86,13 +88,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => response.json())
         .then((data) => {
           document.getElementById("map").dataset.posts = JSON.stringify(data);
-          initMap();
+          updateMarkers(); // マーカーを更新
         });
     });
+  }
 
-  document
-    .getElementById("search-bar-check")
-    .addEventListener("change", function (event) {
+  const searchBarCheck = document.getElementById("search-bar-check");
+  if (searchBarCheck) {
+    searchBarCheck.addEventListener("change", function () {
       const searchFormContainer = document.querySelector(
         ".search-form-container"
       );
@@ -103,18 +106,25 @@ document.addEventListener("DOMContentLoaded", () => {
         searchFormContainer.style.height = "auto";
       }
     });
+  }
 
-  document.getElementById("reset-button").addEventListener("click", () => {
-    document.getElementById("search-form").reset();
-    fetch(window.location.href, {
-      headers: { Accept: "application/json" },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById("map").dataset.posts = JSON.stringify(data);
-        initMap();
-      });
-  });
+  const resetButton = document.getElementById("reset-button");
+  if (resetButton) {
+    resetButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      document.getElementById("search-form").reset();
+
+      // デフォルトの検索結果を再度取得し、マップのデータをリセット
+      fetch(window.location.href, {
+        headers: { Accept: "application/json" },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("map").dataset.posts = JSON.stringify(data);
+          updateMarkers(); // 初期状態に戻すためにマーカーを更新
+        });
+    });
+  }
 });
 
 document.addEventListener("click", (event) => {
