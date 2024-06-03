@@ -43,6 +43,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
+      Rails.logger.debug "編集中"
       flash[:success] = '更新完了しました。'
       redirect_to @post
     else
@@ -72,6 +73,7 @@ class PostsController < ApplicationController
 
   def destroy
     if @post.destroy
+      Rails.logger.debug "削除中"
       flash[:success] = '投稿を削除しました。'
       redirect_to posts_path
     else

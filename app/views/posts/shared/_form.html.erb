@@ -56,11 +56,12 @@
   </div>
 
   <div class="flex justify-end space-x-4">
-    <% if action_name == 'edit' %>
-      <%= button_to '削除', post_path(@post), method: :delete, data: { confirm: '本当に削除しますか？' }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-      <%= f.submit "更新", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-    <% else %>
-      <%= f.submit "投稿", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-    <% end %>
+    <%= f.submit @post.persisted? ? '更新' : '投稿', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+  </div>
+<% end %>
+
+<% if @post.persisted? %>
+  <div class="flex justify-end space-x-4 mt-4">
+    <%= button_to '削除', post_path(@post), method: :delete, data: { confirm: '本当に削除しますか？' }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
   </div>
 <% end %>
