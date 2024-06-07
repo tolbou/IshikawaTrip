@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  mount_uploader :image, ImageUploader
+
   # userインスタンスは複数のpostインスタンスを持つことができる（１対多）
   has_many :posts
 
@@ -10,15 +12,21 @@ class User < ApplicationRecord
 
   # バリデーションの定義
   validates :email, presence: true, uniqueness: true
-  validates :name, presence: true
-  validates :image, presence: true
+  validates :name, presence: { message: "を入力してください" } # ユーザー名のバリデーションを追加
+  validates :image, presence: true, format: { with: /\.(jpeg|jpg|png|heic)\z/i, message: "許可されていないファイル形式です" }
+
+  after_initialize :set_default_image, if: :new_record?
+
+  def set_default_image
+    self.image ||= 'default_profile.png'
+  end
 
   class << self
     def find_or_create_from_auth_hash(auth_hash)
       user_params = user_params_from_auth_hash(auth_hash)
       find_or_create_by(email: user_params[:email]) do |user|
         user.name = user_params[:name]
-        user.image = user_params[:image]
+        user.remote_image_url = user_params[:image]
       end
     end
 

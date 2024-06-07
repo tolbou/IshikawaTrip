@@ -2,12 +2,17 @@ ja:
   activerecord:
     models:
       post: "投稿"
+      user: "ユーザー"
     attributes:
       post:
         title: "スポット名"
         address: "住所"
         report: "おすすめポイント"
         image: "写真"
+      user:
+        name: "名前"
+        email: "メールアドレス"
+        image: "画像"
     errors:
       messages:
         blank: "を入力してください"
@@ -16,5 +21,7 @@ ja:
         not_selected: "を選択してください"
         invalid: "は無効です"
         not_in_ishikawa: "は石川県の住所ではありません"
+        invalid_format: "は無効な形式です"
+        extension_allowlist_error: "許可されていないファイル形式です"
   errors:
     format: "%{attribute} %{message}"

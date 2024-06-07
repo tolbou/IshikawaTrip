@@ -33,7 +33,7 @@ class PostsController < ApplicationController
       flash[:success] = '投稿完了しました。'
       redirect_to posts_path
     else
-      flash.now[:danger] = '投稿に失敗しました。'
+      flash.now[:danger] = '投稿に失敗しま'
       render :new, status: :unprocessable_entity
     end
   end
@@ -45,7 +45,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       Rails.logger.debug "編集中"
       flash[:success] = '更新完了しました。'
-      redirect_to @post
+      redirect_to mypage_path(anchor: 'my-posts')
     else
       flash.now[:danger] = '更新に失敗しました。'
       render :edit, status: :unprocessable_entity
@@ -75,7 +75,7 @@ class PostsController < ApplicationController
     if @post.destroy
       Rails.logger.debug "削除中"
       flash[:success] = '投稿を削除しました。'
-      redirect_to posts_path
+      redirect_to mypage_path(anchor: 'my-posts')
     else
       flash.now[:danger] = '投稿の削除に失敗しました。'
       render :edit, status: :unprocessable_entity

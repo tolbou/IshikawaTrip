@@ -1,4 +1,4 @@
-<div class="search-form-container mb-7">
+<div class="search-form-container mt-10 mb-7">
   <div class="search-form bg-pink-100 p-4 rounded-lg shadow-md">
     <div class="collapse collapse-arrow bg-base-200 shadow">
       <input type="checkbox" id="search-bar-check" class="hidden" />
@@ -31,9 +31,4 @@
 
 <div id="map" class="w-full h-[800px] sm:h-[1000px]" data-posts='<%= @posts.to_json(include: { tags: { only: :title }, month_tags: { only: :title } }, methods: :image_url) %>'></div>
 <%= render 'posts/shared/modal' %>
-
-<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV['GOOGLE_MAPS_API_KEY']}&libraries=places&callback=initMap", async: true, defer: true %>
-<%= javascript_include_tag 'map' %>
-
-<%= javascript_include_tag "application", 'data-turbo-track': "reload", defer: true %>
 

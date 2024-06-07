@@ -13,8 +13,7 @@ class Post < ApplicationRecord
   validates :title, presence: { message: "を入力してください" }, length: { maximum: 255, message: "は%{count}文字以内で入力してください" }
   validates :address, presence: { message: "を入力してください" }, uniqueness: { message: "はすでに存在します" }
   validates :report, length: { maximum: 250, message: "は%{count}文字以内で入力してください" }
-  validates :image, presence: { message: "を選択してください" }
-  # validates :image, length: { maximum: 3, message: 'は3枚までしかアップロードできません' }
+  validates :image, presence: { message: "を選択してください" }, format: { with: /\.(jpeg|jpg|png|heic)\z/i, message: "許可されていないファイル形式です" }
   validate :at_least_one_tag
   validate :address_must_be_in_ishikawa
 
@@ -56,6 +55,6 @@ class Post < ApplicationRecord
   def address_must_be_in_ishikawa
     return if address.include?('石川県')
 
-    errors.add(:base, '石川県の住所を入力してください')
+    errors.add(:base, '石川県の住所を入力してくださ')
   end
 end

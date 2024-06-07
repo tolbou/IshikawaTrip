@@ -31,7 +31,7 @@
     <div class="flex space-x-4">
       <%= form_with(url: like_post_path(@post), method: :post, remote: true, html: { id: 'like-form', data: { turbo: false } }) do %>
         <button type="submit" class="btn btn-primary flex items-center">
-          <i class="<%= current_user.likes.exists?(post: @post) ? 'fas fa-thumbs-up text-black' : 'far fa-thumbs-up text-gray-400' %>" id="like-icon"></i>
+          <i class="<%= current_user.likes.exists?(post: @post) ? 'fas fa-thumbs-up text-black' : 'far fa-thumbs-up text-gray-400' %>" id="like-icon-<%= @post.id %>"></i>
         </button>
       <% end %>
       <% if current_user == @post.user %>
