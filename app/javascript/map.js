@@ -2,6 +2,8 @@ let map; // グローバルなmapオブジェクトを定義
 
 function initMap() {
   const mapElement = document.getElementById("map");
+  if (!mapElement) return;
+
   const mapOptions = {
     center: { lat: 36.578057, lng: 136.648957 },
     zoom: 9,
@@ -10,8 +12,13 @@ function initMap() {
   updateMarkers();
 }
 
+document.addEventListener("DOMContentLoaded", initMap);
+document.addEventListener("turbo:load", initMap);
+
 function updateMarkers() {
   const mapElement = document.getElementById("map");
+  if (!mapElement) return;
+
   const posts = JSON.parse(mapElement.dataset.posts);
 
   if (window.markers) {

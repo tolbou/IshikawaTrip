@@ -1,0 +1,76 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">マイページ</h1>
+  <div class="tabs mb-5">
+    <a href="javascript:void(0);" class="tab mr-7 border-b-2 border-transparent hover:border-gray-300" onclick="showTab('profile')">プロフィール設定</a>
+    <a href="javascript:void(0);" class="tab mr-7 border-b-2 border-transparent hover:border-gray-300" onclick="showTab('my-posts')">自分の投稿</a>
+    <a href="javascript:void(0);" class="tab mr-7 border-b-2 border-transparent hover:border-gray-300" onclick="showTab('liked-posts')">お気に入りの投稿</a>
+  </div>
+
+  <div id="profile" class="tab-content">
+    <%= form_with model: @user, local: true, html: { multipart: true }, data: { turbo: false } do |f| %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation" class="text-red-500">
+          <ul>
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="mb-4 mt-4">
+        <%= image_tag @user.image.url, class: "w-24 h-24 rounded-full object-cover mb-2" if @user.image.present? %>
+        <%= f.label :image, "プロフィール画像", class: "block text-gray-700 text-sm font-bold mb-2 inline" %>
+        <%= f.file_field :image, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", accept: "image/jpeg,image/jpg,image/png,image/heic" %>
+        <span class="text-xs text-gray-500">ファイル形式：jpeg、jpg、png、heic</span>
+      </div>
+      <div class="mb-4">
+        <%= f.label :name, "ユーザー名", class: "block text-gray-700 text-sm font-bold mb-2 inline" %>
+        <span class="text-red-500 inline">*</span>
+        <%= f.text_field :name, value: @user.name, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", placeholder: "ユーザー名を入力してください" %>
+      </div>
+      <div class="mt-20">
+        <%= f.submit "更新する", class: "bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div id="my-posts" class="tab-content hidden">
+    <%= render 'users/my_posts' %>
+  </div>
+
+  <div id="liked-posts" class="tab-content hidden">
+    <%= render 'users/liked_posts' %>
+  </div>
+</div>
+
+<script>
+  function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(function(content) {
+      content.classList.add('hidden');
+    });
+    document.getElementById(tabId).classList.remove('hidden');
+
+    document.querySelectorAll('.tab').forEach(function(tab) {
+      tab.classList.remove('active', 'border-blue-500');
+    });
+    document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active', 'border-blue-500');
+  }
+
+  // ページ読み込み時に、URLのアンカーに基づいてタブを表示
+  document.addEventListener('DOMContentLoaded', function() {
+    const hash = window.location.hash;
+    if (hash) {
+      showTab(hash.substring(1)); // アンカー部分（#以降）を取得してshowTab関数に渡す
+    } else {
+      showTab('profile');
+    }
+  });
+
+  // URLのハッシュが変更されたときにタブを表示
+  window.addEventListener('hashchange', function() {
+    const hash = window.location.hash;
+    if (hash) {
+      showTab(hash.substring(1));
+    }
+  });
+</script>
