@@ -6,4 +6,6 @@ class StaticPagesController < ApplicationController
   def home; end
 
   def after_login; end
+
+  def login_prompt; end
 end

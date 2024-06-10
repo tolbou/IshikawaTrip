@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy, :like]
   before_action :set_tags, only: [:new, :create, :edit, :update]
+  before_action :check_logged_in, except: [:index, :show]
 
   def index
     @posts = Post.all
@@ -23,6 +24,9 @@ class PostsController < ApplicationController
     end
   end
 
+  def show
+  end
+
   def new
     @post = Post.new
   end
@@ -33,7 +37,7 @@ class PostsController < ApplicationController
       flash[:success] = '投稿完了しました。'
       redirect_to posts_path
     else
-      flash.now[:danger] = '投稿に失敗しま'
+      flash.now[:danger] = '投稿に失敗しました。'
       render :new, status: :unprocessable_entity
     end
   end
@@ -43,16 +47,12 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      Rails.logger.debug "編集中"
       flash[:success] = '更新完了しました。'
-      redirect_to mypage_path(anchor: 'my-posts')
+      redirect_to post_path(@post)
     else
       flash.now[:danger] = '更新に失敗しました。'
       render :edit, status: :unprocessable_entity
     end
-  end
-
-  def show
   end
 
   def like
@@ -73,9 +73,12 @@ class PostsController < ApplicationController
 
   def destroy
     if @post.destroy
-      Rails.logger.debug "削除中"
       flash[:success] = '投稿を削除しました。'
-      redirect_to mypage_path(anchor: 'my-posts')
+      if request.referer.include?(mypage_path)
+        redirect_to mypage_path(anchor: 'my-posts')
+      else
+        redirect_to posts_path
+      end
     else
       flash.now[:danger] = '投稿の削除に失敗しました。'
       render :edit, status: :unprocessable_entity
@@ -84,12 +87,12 @@ class PostsController < ApplicationController
 
   private
 
-  def post_params
-    params.require(:post).permit(:title, :address, :report, :image, :image_cache, tag_ids: [], month_tag_ids: [])
-  end
-
   def set_post
     @post = Post.find(params[:id])
+  end
+
+  def post_params
+    params.require(:post).permit(:title, :report, :address, :image, tag_ids: [], month_tag_ids: [])
   end
 
   def set_tags

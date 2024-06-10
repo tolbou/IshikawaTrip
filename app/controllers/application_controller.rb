@@ -8,6 +8,11 @@ class ApplicationController < ActionController::Base
     Rails.logger.info "ログインチェック: #{current_user.inspect}"
     return if current_user
 
-    redirect_to root_path
+    allowed_paths = [posts_path, root_path, before_login_path]
+    allowed_paths << post_path(params[:id]) if params[:id].present?
+
+    unless allowed_paths.include?(request.path) || request.path.match?(/\/posts\/\d+/)
+      redirect_to before_login_path
+    end
   end
 end

@@ -19,9 +19,9 @@
           <% else %>
             <%= image_tag 'default_profile.png', class: "w-12 h-12 rounded-full object-cover" %> <!-- デフォルトのプロフィール画像 -->
           <% end %>
-          <%= current_user.name %>さん
+          <%= current_user.name %>
         <% else %>
-          ゲストさん
+          ゲスト
           <%= button_to "Googleでログイン", "/auth/google_oauth2", method: :post, data: { turbo: false } %>
         <% end %>
       </div>

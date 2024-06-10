@@ -1,9 +1,9 @@
 <div class="container mx-auto p-4">
   <h1 class="text-2xl font-bold mb-4">マイページ</h1>
   <div class="tabs mb-5">
-    <button class="tab mr-7 border-b-2 border-transparent hover:border-gray-300" onclick="showTab('profile')">プロフィール設定</button>
-    <button class="tab mr-7 border-b-2 border-transparent hover:border-gray-300" onclick="showTab('my-posts')">自分の投稿</button>
-    <button class="tab mr-7 border-b-2 border-transparent hover:border-gray-300" onclick="showTab('liked-posts')">お気に入りの投稿</button>
+    <a href="javascript:void(0);" class="tab mr-7 border-b-2 border-transparent hover:border-gray-300" onclick="showTab('profile')">プロフィール設定</a>
+    <a href="javascript:void(0);" class="tab mr-7 border-b-2 border-transparent hover:border-gray-300" onclick="showTab('my-posts')">自分の投稿</a>
+    <a href="javascript:void(0);" class="tab mr-7 border-b-2 border-transparent hover:border-gray-300" onclick="showTab('liked-posts')">お気に入りの投稿</a>
   </div>
 
   <div id="profile" class="tab-content">
@@ -35,40 +35,11 @@
   </div>
 
   <div id="my-posts" class="tab-content hidden">
-    <% @user.posts.each do |post| %>
-      <div class="bg-gray-100 p-4 rounded-lg shadow mb-4 flex">
-        <%= image_tag post.image.url, class: "w-36 h-36 rounded-lg object-cover mb-2" if post.image.present? %>
-        <div class="ml-4 w-2/3">
-          <h3 class="text-lg font-semibold text-gray-700 mb-2"><%= post.title %></h3>
-          <p class="text-gray-600 mb-2">所在地</p>
-          <p class="text-gray-600 mb-2"><%= post.address %></p>
-          <div class="flex justify-end space-x-2">
-            <%= link_to '編集', edit_post_path(post), class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
-            <%= link_to '削除', post, method: :delete, data: { confirm: '本当に削除しますか？' }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
-          </div>
-        </div>
-      </div>
-    <% end %>
+    <%= render 'users/my_posts' %>
   </div>
 
   <div id="liked-posts" class="tab-content hidden">
-    <% @user.liked_posts.each do |post| %>
-      <div class="bg-gray-100 p-4 rounded-lg shadow mb-4 flex">
-        <%= image_tag post.image.url, class: "w-36 h-36 rounded-lg object-cover mb-2" if post.image.present? %>
-        <div class="ml-4 w-2/3">
-          <h3 class="text-lg font-semibold text-gray-700 mb-2"><%= post.title %></h3>
-          <p class="text-gray-600 mb-2">所在地</p>
-          <p class="text-gray-600 mb-2"><%= post.address %></p>
-          <div class="flex justify-end space-x-2">
-            <%= form_with(url: like_post_path(post), method: :post, remote: true, html: { id: "like-form-#{post.id}", data: { turbo: false } }) do %>
-              <button type="submit" class="btn btn-primary flex items-center">
-                <i class="<%= current_user.likes.exists?(post: post) ? 'fas fa-thumbs-up text-black' : 'far fa-thumbs-up text-gray-400' %>" id="like-icon-<%= post.id %>"></i>
-              </button>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    <% end %>
+    <%= render 'users/liked_posts' %>
   </div>
 </div>
 
@@ -85,8 +56,21 @@
     document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active', 'border-blue-500');
   }
 
-  // 初期表示でプロフィール設定タブを表示
+  // ページ読み込み時に、URLのアンカーに基づいてタブを表示
   document.addEventListener('DOMContentLoaded', function() {
-    showTab('profile');
+    const hash = window.location.hash;
+    if (hash) {
+      showTab(hash.substring(1)); // アンカー部分（#以降）を取得してshowTab関数に渡す
+    } else {
+      showTab('profile');
+    }
+  });
+
+  // URLのハッシュが変更されたときにタブを表示
+  window.addEventListener('hashchange', function() {
+    const hash = window.location.hash;
+    if (hash) {
+      showTab(hash.substring(1));
+    }
   });
 </script>
